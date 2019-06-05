@@ -31,31 +31,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String intentip;
     TextView output;
     Thread myThread;
+    ServerSocket ss;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         intentip = intent.getStringExtra("ip");
-        //toast(intentip);
+
         myThread = new Thread(new MyServer());
         myThread.start();
         output = findViewById(R.id.textView);
     }
 
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        Log.d("xd", "okrutnik no");
-        //myThread.start();
-    }
-
     @Override
     protected void onPause(){
+        Log.d("xd", "pausing");
+        try {
+            ss.close();
+        }
+        catch(Exception e){
+            Log.d("xd", e.toString());
+        }
         super.onPause();
-        Log.d("xd", "closing");
-        //myThread.interrupt();
     }
     public void onClick(View v) {
         text = output.getText().toString();
@@ -307,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dos.writeUTF(message);
                 dos.close();
                 s.close();
+                Log.d("xd", "Sent");
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -316,11 +315,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     class MyServer implements Runnable{
-        ServerSocket ss;
+        Handler serverHandler = new Handler();
         Socket mysocket;
         DataInputStream dis;
         String message;
-        Handler handler = new Handler();
         @Override
         public void run(){
             Log.d("xd", "setup started");
@@ -328,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ss= new ServerSocket();
                 ss.setReuseAddress(true);
                 ss.bind(new InetSocketAddress(2137));
-                handler.post(new Runnable() {
+                serverHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(getApplication(), "Łączenie", Toast.LENGTH_LONG).show();
@@ -337,12 +335,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("xd", "setup done");
                 while(true){
                     Log.d("xd", "loop");
-                    mysocket =ss.accept();
+                    mysocket = ss.accept();
                     dis = new DataInputStream(mysocket.getInputStream());
                     message= dis.readUTF();
-                    handler.post(new Runnable() {
+                    serverHandler.post(new Runnable() {
                         @Override
                         public void run() {
+
                             if(message.equals("play")){
                                 nwm();
                             }
