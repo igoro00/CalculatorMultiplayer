@@ -27,21 +27,22 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    String text;
-    String intentip;
-    TextView output;
-    Thread myThread;
-    ServerSocket ss;
+    private String text;
+    private String intentip = "";
+    private TextView output;
+    private Thread myThread;
+    private ServerSocket ss;
+    private Formatters formatters = new Formatters();
+    private boolean isConnected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        output = findViewById(R.id.textView);
         Intent intent = getIntent();
         intentip = intent.getStringExtra("ip");
-
         myThread = new Thread(new MyServer());
         myThread.start();
-        output = findViewById(R.id.textView);
     }
 
     @Override
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onPause();
     }
+
     public void onClick(View v) {
         text = output.getText().toString();
         if(text.isEmpty()){
@@ -179,26 +181,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             case R.id.buttonPapa: {
-                text=text+"\uD83D\uDE02";
+                text+="\uD83D\uDE02";
                 break;
             }
 
             case R.id.buttonDel: {
-                if(text.length()>0) {
-                    int i = text.length()-1;
-                    if(text.endsWith("\uD83D\uDE02")){
-                        text = text.replace(text.substring(text.length()-1), "");
-                    }
-                    text = text.replace(text.substring(text.length()-1), "");
-                }
+                text = formatters.formatBackspace(text);
                 break;
             }
 
             case R.id.buttonEquals: {
                 if(text.contains("\uD83D\uDE02")){
                     text = text.replaceAll("\uD83D\uDE02", "");
-                    BackgroundTask b = new BackgroundTask();
-                    b.execute(intentip, "play");
+                    send("play");
                     nwm();
                     break;
                 }
@@ -224,8 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             output.setTextSize(50);
         }
         output.setText(text);
-        BackgroundTask b = new BackgroundTask();
-        b.execute(intentip, text);
+        send(text);
         Log.d("xd", output.getText().toString());
     }
 
@@ -235,6 +229,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     void toast(String message) {
         Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show();
+    }
+
+    void send(String message) {
+        BackgroundTask b = new BackgroundTask();
+        b.execute(intentip, message);
     }
 
     void calculate(){
@@ -329,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 serverHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplication(), "Łączenie", Toast.LENGTH_LONG).show();
+                        toast("Łączenie");
                     }
                 });
                 Log.d("xd", "setup done");
@@ -341,7 +340,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     serverHandler.post(new Runnable() {
                         @Override
                         public void run() {
-
+                            if(!isConnected){
+                                isConnected = true;
+                                toast("Połączono");
+                            }
                             if(message.equals("play")){
                                 nwm();
                             }

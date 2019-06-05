@@ -66,7 +66,8 @@ public class InitGuestActivity extends AppCompatActivity {
     }
 
     public void fill(View v){
-        IpToFillFormat ipFormatter = new IpToFillFormat();
-        ipInput.setText(ipFormatter.format(myIP));
+        Formatters formatters = new Formatters();
+        ipInput.setText(formatters.formatIP(myIP));
+        ipInput.setSelection(ipInput.getText().length());
     }
 }
