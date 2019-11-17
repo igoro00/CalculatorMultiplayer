@@ -349,6 +349,7 @@
         android:background="@drawable/sqr_button_shape"
         android:gravity="center"
         android:text="JP2"
+        android:longClickable="true"
         android:textAlignment="center"
         android:textColor="@color/text"
         android:textSize="30dp"

@@ -2,4 +2,5 @@
     <string name="app_name">Calculator Multiplayer</string>
     <string name="edittext_hint"><font size="36">wpisz se cos</font></string>
     <string name="title_activity_choose_side">chooseSide</string>
+    <string name="dialog_send_button_text">Wyślij</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.calculatormultiplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,9 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String uniqueID = null;
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
     private boolean isMP;
+    private Button buttonPapa;
+    private Dialog sendTxtDialog;
 
     public synchronized static String id(Context context) {
         if (uniqueID == null) {
@@ -55,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
         output = findViewById(R.id.textView);
         isMP = getIntent().getBooleanExtra("isMP", false);
         if(isMP) {
@@ -88,28 +92,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             JSONObject data = (JSONObject) args[0];
                             try {
                                 String message = data.getString("message");
-                                if (!message.equals("play") && !message.startsWith("txt: ")) {
-                                    output.setText(message);
-                                    if (message.length() > 10) {
-                                        double d = 500 / message.length();
-                                        output.setTextSize((float) d);
-                                    }
-                                    else {
-                                        output.setTextSize(50);
-                                    }
-                                }
-                                else if(message.equals("play")){
-                                    nwm();
-                                }
-                                else{
-                                    message = message.substring(5);
-                                    toast(message);
-                                }
+                                 if (!message.equals("play") && !message.startsWith("txt: ")) {
+                                     output.setText(message);
+                                     if (message.length() > 10) {
+                                         double d = 500 / message.length();
+                                         output.setTextSize((float) d);
+                                     }
+                                     else {
+                                         output.setTextSize(50);
+                                     }
+                                 }
+                                 else if(message.equals("play")){
+                                     nwm();
+                                 }
+                                 else{
+                                     message = message.substring(5);
+                                     toast(message);
+                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
                     });
+                }
+            });
+            buttonPapa =(Button)findViewById(R.id.buttonPapa);
+            buttonPapa.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) {
+                    sendTxtDialog = new Dialog(MainActivity.this);
+                    sendTxtDialog.setContentView(R.layout.dialog_template);
+                    final EditText Write = (EditText)sendTxtDialog.findViewById(R.id.write);
+                    Button SendTxt = (Button)sendTxtDialog.findViewById(R.id.sendButton);
+                    Write.setEnabled(true);
+                    SendTxt.setEnabled(true);
+                    SendTxt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            send("txt: " + Write.getText().toString());
+                            sendTxtDialog.cancel();
+                            send(output.getText().toString());
+                        }
+                    });
+                    sendTxtDialog.show();
+                    return true;
                 }
             });
         }
@@ -184,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             case R.id.buttonMinus: {
-                if (text.endsWith("+") || text.endsWith("-") || text.endsWith("*") || text.endsWith("/")) {
+                if (text.endsWith("+") || text.endsWith("-")) {
                     text = text.substring(0, text.length() - 1)
                             + "-"
                             + text.substring(text.length());
