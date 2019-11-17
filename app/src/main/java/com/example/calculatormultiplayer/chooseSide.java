@@ -2,10 +2,7 @@ package com.example.calculatormultiplayer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 public class chooseSide extends AppCompatActivity {
@@ -17,18 +14,16 @@ public class chooseSide extends AppCompatActivity {
 
     }
 
-    public void toSingle(View v){
+    public void toSP(View v){
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("isMP", false);
         startActivity(intent);
     }
 
-    public void toGuest(View v){
-        Intent intent = new Intent(this, InitGuestActivity.class);
+    public void toMP(View v){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("isMP", true);
         startActivity(intent);
     }
 
-    public void toHost(View v){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 }

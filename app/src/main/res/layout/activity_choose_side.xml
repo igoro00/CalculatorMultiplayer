@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         android:layout_marginEnd="32dp"
         android:background="@drawable/big_button_shape"
         android:fontFamily="@font/qanelas_extrabold"
-        android:onClick="toGuest"
+        android:onClick="toMP"
         android:text="mam koleguf :)"
         android:textColor="@color/text"
         android:textSize="26sp"
@@ -55,10 +55,10 @@
         android:text="nje mam koleguf :("
         android:textColor="@color/text"
         android:textSize="26sp"
-        android:onClick="toSingle"
+        android:onClick="toSP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonGuest" />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
