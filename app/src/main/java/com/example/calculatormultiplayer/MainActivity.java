@@ -1,6 +1,7 @@
 package com.example.calculatormultiplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String uniqueID = null;
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
     private boolean isMP;
-    private Button buttonPapa;
+    private ImageButton buttonDel;
     private Dialog sendTxtDialog;
 
     public synchronized static String id(Context context) {
@@ -64,13 +66,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         output = findViewById(R.id.textView);
         isMP = getIntent().getBooleanExtra("isMP", false);
         if(isMP) {
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(this);
+            String serverURL = sharedPreferences.getString("serverURL", "example.com");
+
+
+
             try {
-                socket = IO.socket("http://igoro00.ddns.net:3000");
+                socket = IO.socket(formatURL(serverURL));
                 Log.d("xd", "connect");
                 socket.connect();
                 socket.emit("join", id(this));
             } catch (URISyntaxException e) {
                 e.printStackTrace();
+                toast("NIE UDAŁO SIĘ NAWIĄZAĆ POŁĄCZENIA!");
             }
             socket.on("userjoinedthechat", new Emitter.Listener() {
                 @Override
@@ -116,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     });
                 }
             });
-            buttonPapa =(Button)findViewById(R.id.buttonPapa);
+            Button buttonPapa =(Button)findViewById(R.id.buttonPapa);
             buttonPapa.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View v) {
                     sendTxtDialog = new Dialog(MainActivity.this);
@@ -138,6 +147,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
+        buttonDel = findViewById(R.id.buttonDel);
+        buttonDel.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                text = "";
+                output.setText(text);
+                return true;
+            }
+        });
     }
 
     public void onClick(View v) {
@@ -241,9 +259,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
 
-            case R.id.buttonClear: {
-                text = "";
-                output.setText(text);
+            case R.id.buttonSqrt: {
+                //text = text + "√";
+                //text = text + "sqrt(9)";
+                //output.setText(text);
                 break;
             }
 
@@ -334,6 +353,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void nwm() {
         final MediaPlayer nwmPlayer = MediaPlayer.create(this, R.raw.nwm);
         nwmPlayer.start();
+    }
+
+    String formatURL(String input){
+        String portchck = input;
+        //usun wszystkie cyfry na koncu i sprawdz czy jest : przed nimi
+        //jeśli nie ma to znaczy ze nie ma portu i trzeba dodać domyslny
+        while(Character.isDigit(portchck.charAt(portchck.length()-1))){
+            portchck = portchck.substring(0, portchck.length() - 1);
+        }
+        if(portchck.charAt(portchck.length()-1)!=':'){
+            input = input + ":2137";
+        }
+
+
+        if(input.startsWith("https://")){
+            input=input.substring(0,5)+input.substring(5+1);
+        }
+        if(!input.startsWith("http://")){
+            input = "http://" + input;
+        }
+
+
+        return input;
     }
 
     @Override

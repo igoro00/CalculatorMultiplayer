@@ -3,7 +3,12 @@ package com.example.calculatormultiplayer;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toolbar;
 
 public class chooseSide extends AppCompatActivity {
 
@@ -26,4 +31,24 @@ public class chooseSide extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void showPopup(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        // This activity implements OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.setting:
+                        Intent intent = new Intent(chooseSide.this, SettingsActivity.class);
+                        startActivity(intent);
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.inflate(R.menu.mymenu);
+        popup.show();
+    }
 }

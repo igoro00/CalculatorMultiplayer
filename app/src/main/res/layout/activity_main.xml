@@ -63,14 +63,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/buttonClear"
+        android:id="@+id/buttonSqrt"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/sqr_button_shape"
         android:gravity="center"
-        android:text="C"
+        android:text=""
         android:textAlignment="center"
         android:textColor="@color/text"
         android:textSize="36dp"
@@ -92,11 +92,12 @@
         android:scaleType="fitCenter"
         android:padding="5dp"
         android:onClick="onClick"
+        android:longClickable="true"
         android:src="@drawable/backspace_white_192x192"
         app:layout_constraintBottom_toBottomOf="@+id/buttonDiv"
         app:layout_constraintEnd_toStartOf="@+id/buttonDiv"
         app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toEndOf="@+id/buttonClear"
+        app:layout_constraintStart_toEndOf="@+id/buttonSqrt"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
@@ -131,8 +132,8 @@
         android:textSize="36dp"
         android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="@+id/button8"
-        app:layout_constraintEnd_toEndOf="@+id/buttonClear"
-        app:layout_constraintStart_toStartOf="@+id/buttonClear"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSqrt"
+        app:layout_constraintStart_toStartOf="@+id/buttonSqrt"
         app:layout_constraintTop_toTopOf="@+id/button8" />
 
     <Button
