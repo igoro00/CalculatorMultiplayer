@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.calculatormultiplayer">
+    package="ordecha.igor.calculatormultiplayer">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -19,7 +19,7 @@
             android:parentActivityName=".chooseSide">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.calculatormultiplayer.chooseSide" />
+                android:value="ordecha.igor.calculatormultiplayer.chooseSide" />
         </activity>
         <activity
             android:name=".chooseSide"
