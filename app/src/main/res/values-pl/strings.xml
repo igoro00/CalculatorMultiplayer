@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_send_button_text">Wyślij</string>
+    <string name="edittext_hint">wpisz se coś</string>
+    <string name="messages_header">Ogólne</string>
+    <string name="app_name">Kalkulator Multiplayer</string>
+    <string name="server_url">Adres serwera</string>
+    <string name="title_activity_choose_side">Wybierz tryb</string>
+    <string name="title_activity_settings">Ustawienia</string>
+</resources>

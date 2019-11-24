@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Calculator Multiplayer</string>
-    <string name="edittext_hint"><font size="36">wpisz se cos</font></string>
-    <string name="title_activity_choose_side">chooseSide</string>
-    <string name="dialog_send_button_text">Wyślij</string>
-    <string name="title_activity_settings">Ustawienia</string>
+    <string name="edittext_hint"><font size="36">type somethin..</font></string>
+    <string name="title_activity_choose_side">Choose Mode</string>
+    <string name="dialog_send_button_text">Send</string>
+    <string name="title_activity_settings">Settings</string>
 
-    <string name="messages_header">Ogólne</string>
-    <string name="server_url">Adres serwera</string>
+    <string name="messages_header">Main</string>
+    <string name="server_url">Server address</string>
 
 </resources>
