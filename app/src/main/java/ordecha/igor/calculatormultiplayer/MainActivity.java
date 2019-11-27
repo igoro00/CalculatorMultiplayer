@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 uniqueID = UUID.randomUUID().toString();
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 editor.putString(PREF_UNIQUE_ID, uniqueID);
-                editor.commit();
+                editor.apply();
             }
         }
         return uniqueID;
@@ -66,9 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             SharedPreferences sharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(this);
             String serverURL = sharedPreferences.getString("serverURL", "example.com");
-
-
-
             try {
                 socket = IO.socket(formatURL(serverURL));
                 Log.d("xd", "connect");
@@ -99,14 +96,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             try {
                                 String message = data.getString("message");
                                  if (!message.equals("play") && !message.startsWith("txt: ")) {
-                                     output.setText(message);
-                                     if (message.length() > 10) {
-                                         double d = 500 / message.length();
+                                     if (message.length() > 9) {
+
+                                         double d = 450 / message.length();
                                          output.setTextSize((float) d);
                                      }
                                      else {
                                          output.setTextSize(50);
                                      }
+                                     output.setText(message);
+
                                  }
                                  else if(message.equals("play")){
                                      nwm();
@@ -150,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onLongClick(View v) {
                 text = "";
                 output.setText(text);
+                send(text);
                 return true;
             }
         });
@@ -301,8 +301,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
         }
-        if (text.length() > 10) {
-            double d = 500 / text.length();
+        if (text.length() > 9) {
+            double d = 450 / text.length();
             output.setTextSize((float) d);
         } else {
             output.setTextSize(50);
@@ -348,6 +348,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void nwm() {
+        //ToDo: możliwość zmiany dźwięku w ustawieniach
         final MediaPlayer nwmPlayer = MediaPlayer.create(this, R.raw.nwm);
         nwmPlayer.start();
     }
